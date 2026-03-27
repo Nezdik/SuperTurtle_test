@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SuperTurtle Motion - Product Hunt</title>
+    <style>
+      @font-face {
+        font-family: "Geist";
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: swap;
+        src: url("https://superturtle.dev/_next/static/media/4cf2300e9c8272f7-s.p.woff2") format("woff2");
+      }
+
+      @font-face {
+        font-family: "Geist Mono";
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: swap;
+        src: url("https://superturtle.dev/_next/static/media/93f479601ee12b01-s.p.woff2") format("woff2");
+      }
+
+      :root {
+        --bg: #faf9f7;
+        --z900: #18181b;
+        --z700: #3f3f46;
+        --z500: #71717a;
+        --z400: #a1a1aa;
+        --z200: #e4e4e7;
+        --z100: #f4f4f5;
+        --accent: #6e823a;
+        --radius: 0.75rem;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Geist, "Inter", "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--z900);
+        -webkit-font-smoothing: antialiased;
+        overflow: hidden;
+      }
+
+      .app {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        border-bottom: 1px solid rgba(228, 228, 231, 0.8);
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(24px);
+      }
+
+      .topbar-inner {
+        max-width: 64rem;
+        margin: 0 auto;
+        padding: 0.875rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+      }
+
+      .brand img {
+        width: 36px;
+        height: 36px;
+      }
+
+      .brand-name {
+        display: flex;
+        flex-direction: column;
+        line-height: 1;
+      }
+
+      .brand-name strong {
+        font-size: 1.05rem;
+        font-weight: 600;
+        letter-spacing: -0.025em;
+      }
+
+      .brand-name span {
+        margin-top: 2px;
+        font-size: 10px;
+        color: var(--z400);
+        font-weight: 500;
+      }
+
+      .badge {
+        border: 1px solid rgba(167, 243, 208, 0.6);
+        background: rgba(236, 253, 245, 0.6);
+        color: rgb(4, 120, 87);
+        border-radius: 999px;
+        padding: 0.25rem 0.75rem;
+        font-family: "Geist Mono", ui-monospace, monospace;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .main {
+        max-width: 64rem;
+        width: 100%;
+        margin: 0 auto;
+        flex: 1;
+        padding: 3.5rem 1.5rem 2rem;
+        position: relative;
+      }
+
+      .hero {
+        max-width: 640px;
+        margin-bottom: 1.5rem;
+      }
+
+      .hero h1 {
+        font-size: clamp(2.5rem, 5.5vw, 4rem);
+        line-height: 1.05;
+        letter-spacing: -0.035em;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .hero .accent {
+        color: var(--accent);
+      }
+
+      .hero p {
+        margin-top: 0.75rem;
+        color: var(--z500);
+        line-height: 1.7;
+        font-size: 16px;
+        max-width: 540px;
+      }
+
+      .scene {
+        border: 1px solid rgba(228, 228, 231, 0.8);
+        background: #fff;
+        border-radius: 1rem;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        position: relative;
+        overflow: hidden;
+        min-height: 390px;
+      }
+
+      .noise::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0.025;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-repeat: repeat;
+        background-size: 256px 256px;
+        pointer-events: none;
+      }
+
+      canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .moving-turtle {
+        position: absolute;
+        width: 86px;
+        height: 86px;
+        filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.08));
+        transform-origin: center;
+        pointer-events: none;
+      }
+
+      .floating-cta {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 5;
+      }
+
+      .floating-cta img {
+        width: 250px;
+        height: 54px;
+      }
+
+      .footer-note {
+        position: absolute;
+        right: 16px;
+        bottom: 12px;
+        color: var(--z400);
+        font-size: 12px;
+      }
+
+      @media (max-width: 740px) {
+        .hero h1 {
+          font-size: clamp(2rem, 9.5vw, 3rem);
+        }
+
+        .scene {
+          min-height: 460px;
+        }
+
+        .moving-turtle {
+          width: 72px;
+          height: 72px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <div class="brand">
+            <img src="https://superturtle.dev/stickers/flying-saucer-turtle.png" alt="SuperTurtle" />
+            <div class="brand-name">
+              <strong>SuperTurtle</strong>
+              <span>Cloud</span>
+            </div>
+          </div>
+          <div class="badge">Early access</div>
+        </div>
+      </header>
+
+      <main class="main">
+        <section class="hero">
+          <h1>
+            Meet your<br />
+            <span class="accent">SuperTurtle.</span>
+          </h1>
+          <p>
+            Styled after superturtle.dev: clean zinc palette, Geist typography, soft cards,
+            and a turtle that writes your Product Hunt call-to-action in motion.
+          </p>
+        </section>
+
+        <section class="scene noise">
+          <div class="floating-cta">
+            <img
+              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1106855&theme=light"
+              alt="SuperTurtle on Product Hunt"
+            />
+          </div>
+
+          <canvas id="canvas"></canvas>
+          <img
+            id="turtle"
+            class="moving-turtle"
+            src="https://superturtle.dev/stickers/flying-saucer-turtle.png"
+            alt=""
+          />
+          <div class="footer-note">Motion trail: Vote for SuperTurtle on Product Hunt</div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const phrase = "VOTE FOR SUPERTURTLE ON PRODUCT HUNT";
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      const turtle = document.getElementById("turtle");
+      const scene = document.querySelector(".scene");
+
+      let width = 0;
+      let height = 0;
+      let dpr = 1;
+      let startedAt = 0;
+      const duration = 12000;
+
+      function clamp(v, min, max) {
+        return Math.max(min, Math.min(max, v));
+      }
+
+      function resize() {
+        const rect = scene.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        dpr = window.devicePixelRatio || 1;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function point(t) {
+        const left = Math.max(40, width * 0.06);
+        const right = width - left;
+        const x = left + (right - left) * t;
+
+        const y =
+          height * 0.72 -
+          Math.sin(t * Math.PI * 3.6) * (height * 0.11) -
+          t * (height * 0.28);
+
+        return { x, y };
+      }
+
+      function angle(t) {
+        const dt = 0.0015;
+        const p1 = point(clamp(t - dt, 0, 1));
+        const p2 = point(clamp(t + dt, 0, 1));
+        return Math.atan2(p2.y - p1.y, p2.x - p1.x);
+      }
+
+      function drawGuide() {
+        ctx.save();
+        ctx.beginPath();
+        for (let i = 0; i <= 150; i++) {
+          const t = i / 150;
+          const p = point(t);
+          if (i === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        }
+        ctx.strokeStyle = "rgba(161, 161, 170, 0.35)";
+        ctx.lineWidth = 1.4;
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawTrail(progress) {
+        const letters = Math.floor(phrase.length * progress);
+
+        ctx.save();
+        ctx.font = "600 clamp(18px, 2.1vw, 31px) Geist, Inter, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        for (let i = 0; i < letters; i++) {
+          const t = (i + 0.7) / phrase.length;
+          const p = point(t);
+          const a = angle(t);
+
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(a);
+          ctx.fillStyle = "#6e823a";
+          ctx.fillText(phrase[i], 0, 0);
+          ctx.restore();
+        }
+
+        ctx.restore();
+      }
+
+      function drawGlow(progress) {
+        const p = point(progress);
+        ctx.save();
+        const g = ctx.createRadialGradient(p.x, p.y, 2, p.x, p.y, 24);
+        g.addColorStop(0, "rgba(110,130,58,0.30)");
+        g.addColorStop(1, "rgba(110,130,58,0)");
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 24, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function placeTurtle(progress) {
+        const p = point(progress);
+        const deg = (angle(progress) * 180) / Math.PI;
+        const size = turtle.clientWidth || 86;
+        turtle.style.transform = `translate(${p.x - size / 2}px, ${p.y - size / 2}px) rotate(${deg}deg)`;
+      }
+
+      function frame(ts) {
+        if (!startedAt) startedAt = ts;
+        const elapsed = ts - startedAt;
+        const progress = ((elapsed % duration) / duration);
+
+        ctx.clearRect(0, 0, width, height);
+        drawGuide();
+        drawTrail(progress);
+        drawGlow(progress);
+        placeTurtle(progress);
+
+        requestAnimationFrame(frame);
+      }
+
+      window.addEventListener("resize", resize);
+      resize();
+      requestAnimationFrame(frame);
+    </script>
+  </body>
+</html>
