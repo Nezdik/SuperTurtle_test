@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Studio Landing</title>
+  <style>
+    :root {
+      --bg: #f4f0e7;
+      --card: #fffdf8;
+      --text: #1f1c17;
+      --muted: #5f564b;
+      --accent: #d45b2f;
+      --accent-2: #176b68;
+      --line: #d9cfbf;
+      --radius: 18px;
+      --shadow: 0 14px 35px rgba(20, 12, 5, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Avenir Next", "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, #ffd9c8 0%, transparent 40%),
+        radial-gradient(circle at 88% 18%, #bee8e2 0%, transparent 36%),
+        linear-gradient(160deg, #f8f3ea 0%, #f0e7d8 100%);
+      min-height: 100vh;
+    }
+
+    .wrap {
+      width: min(1120px, 92vw);
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 32px;
+      align-items: center;
+      padding: 24px 0 56px;
+    }
+
+    .hero-card {
+      background: var(--card);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 38px;
+      animation: rise 0.8s ease-out both;
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+
+    p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 1.02rem;
+    }
+
+    .actions {
+      margin-top: 26px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 20px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn.primary {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 10px 20px rgba(212, 91, 47, 0.32);
+    }
+
+    .btn.ghost {
+      background: white;
+      border: 1px solid var(--line);
+      color: var(--text);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(120px, 1fr));
+      gap: 14px;
+    }
+
+    .metric {
+      background: rgba(255,255,255,0.8);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 14px;
+      padding: 18px;
+      backdrop-filter: blur(3px);
+      animation: rise 1s ease-out both;
+    }
+
+    .metric strong {
+      font-size: 1.7rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .lower {
+      margin: 24px 0 32px;
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 26px;
+      box-shadow: var(--shadow);
+      animation: rise 1.15s ease-out both;
+    }
+
+    .panel h2 {
+      margin: 0 0 10px;
+      font-size: 1.4rem;
+      letter-spacing: -0.01em;
+    }
+
+    .steps {
+      margin-top: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .step {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      color: var(--muted);
+      font-size: 0.97rem;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      margin-top: 6px;
+      background: var(--accent-2);
+      flex-shrink: 0;
+    }
+
+    .cta {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: linear-gradient(130deg, #185c58, #2a807b);
+      color: #eefdfb;
+    }
+
+    .cta p {
+      color: #d9f3f0;
+    }
+
+    .cta .btn.primary {
+      background: #f4b95d;
+      color: #2a1c03;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.22);
+    }
+
+    footer {
+      margin: 6px 0 30px;
+      padding: 18px 0 0;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      color: #74695c;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.92rem;
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 880px) {
+      .hero,
+      .lower {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-card,
+      .panel {
+        padding: 24px;
+      }
+
+      .metrics {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">Northline Studio</div>
+      <button class="btn ghost">Book Intro Call</button>
+    </header>
+
+    <section class="hero">
+      <article class="hero-card">
+        <h1>Design that fills every pixel with purpose.</h1>
+        <p>
+          No dead zones, no awkward empty fold. This layout keeps the lower half of the screen useful with structured content, conversion messaging, and confident visual rhythm.
+        </p>
+        <div class="actions">
+          <button class="btn primary">Start Project</button>
+          <button class="btn ghost">See Work</button>
+        </div>
+      </article>
+
+      <div class="metrics">
+        <div class="metric"><strong>+38%</strong><span>Average engagement lift</span></div>
+        <div class="metric"><strong>2.1x</strong><span>Scroll depth improvement</span></div>
+        <div class="metric"><strong>94%</strong><span>Mobile usability score</span></div>
+        <div class="metric"><strong>12d</strong><span>Typical launch timeline</span></div>
+      </div>
+    </section>
+
+    <section class="lower">
+      <article class="panel">
+        <h2>Lower Screen Strategy</h2>
+        <p>
+          The bottom area now contains meaningful UX blocks so users always see continuity and a clear next action.
+        </p>
+        <div class="steps">
+          <div class="step"><span class="dot"></span><span>Context block: explains value in one concise paragraph.</span></div>
+          <div class="step"><span class="dot"></span><span>Action block: high-contrast CTA with clear conversion intent.</span></div>
+          <div class="step"><span class="dot"></span><span>Trust block: quick social proof and performance metrics.</span></div>
+        </div>
+      </article>
+
+      <article class="panel cta">
+        <div>
+          <h2>Want this applied to your exact page?</h2>
+          <p>
+            I can also adapt this to your existing colors, typography, and brand voice so it feels native rather than templated.
+          </p>
+        </div>
+        <div class="actions">
+          <button class="btn primary">Redesign My Screen</button>
+          <button class="btn ghost">Get Wireframe</button>
+        </div>
+      </article>
+    </section>
+
+    <footer>
+      <span>Northline Studio · UX & Product Design</span>
+      <span>Built for desktop + mobile readability</span>
+    </footer>
+  </div>
+</body>
+</html>
